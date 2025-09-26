@@ -12,15 +12,21 @@ from telegram.ext import (
     ContextTypes,
 )
 # --- Part 2: Web Server Imports (to keep the bot alive on Replit) ---
-from flask import Flask
+from flask import Flask, request 
 from threading import Thread
 
 # --- Part 3: Web Server Setup ---
 app = Flask('')
 
-@app.route('/')
-def home():
-    return "I'm alive!"
+@app.route('/', methods=['GET', 'POST'])
+def webhook():
+    if request.method == 'POST':
+        # This part is for Telegram. It receives the message.
+        print("Data received from Telegram:", request.get_json())
+        return "ok", 200
+    else:
+        # This part is for UptimeRobot.
+        return "I'm alive and ready for messages!"
 
 def run_web_server():
   app.run(host='0.0.0.0', port=8080)
