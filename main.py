@@ -20,7 +20,7 @@ from telegram.ext import (
 # --- Part 2: Initialize Bot and Web Server ---
 
 # Get the bot token from Replit Secrets
-BOT_TOKEN = os.environ.get("BOT_TOKEN")
+BOT_TOKEN = os.environ.get("TOKEN")
 if not BOT_TOKEN:
     raise ValueError("No BOT_TOKEN found in environment variables. Please set it in Replit Secrets.")
 
