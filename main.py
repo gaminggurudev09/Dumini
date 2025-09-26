@@ -1,5 +1,6 @@
 # --- Part 1: All the necessary imports ---
 import logging
+import asyncio 
 import os
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
@@ -20,12 +21,13 @@ app = Flask('')
 
 @app.route('/', methods=['GET', 'POST'])
 def webhook():
-    if request.method == 'POST':
-        # This part is for Telegram. It receives the message.
-        print("Data received from Telegram:", request.get_json())
-        return "ok", 200
+   if request.method == 'POST':
+    update = Update.de_json(request.get_json(force=True), application.bot)
+    asyncio.run(application.process_update(update))
+
+    return "ok", 200
+
     else:
-        # This part is for UptimeRobot.
         return "I'm alive and ready for messages!"
 
 def run_web_server():
@@ -121,8 +123,9 @@ def main() -> None:
     )
 
     application.add_handler(conv_handler)
-    print("Bot is starting...")
-    application.run_polling()
-
-if __name__ == "__main__":
-    main()
+    # --- THE NEW, CORRECTED CODE ---
+    if __name__ == "__main__":
+        # Start the web server to listen for messages from Telegram
+        keep_alive()
+        print("Bot is alive and listening for webhook updates...") 
+# End Of file  
